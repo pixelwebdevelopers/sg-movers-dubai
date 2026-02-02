@@ -1,54 +1,53 @@
 import { Package, Truck, Shield, Clock, Home, Building2 } from "lucide-react";
-
-const services = [
-  {
-    icon: Truck,
-    title: "Room Shifting",
-    description: "Quick and efficient room-to-room shifting with professional handling of all your belongings.",
-  },
-  {
-    icon: Package,
-    title: "Professional Packing",
-    description: "Expert packing services using high-quality materials to ensure your items stay safe.",
-  },
-  {
-    icon: Home,
-    title: "Villa Moving",
-    description: "Complete villa relocation services including furniture disassembly and reassembly.",
-  },
-  {
-    icon: Building2,
-    title: "Office Moving",
-    description: "Seamless commercial moves with minimal downtime for your business operations.",
-  },
-  {
-    icon: Shield,
-    title: "Secure Handling",
-    description: "Your valuables are protected with our careful handling and secure transport.",
-  },
-  {
-    icon: Clock,
-    title: "Timely Delivery",
-    description: "We respect your time with punctual pickup and on-schedule delivery.",
-  },
-];
+import { useLanguage } from "./LanguageContext";
 
 const ServicesSection = () => {
+  const { t } = useLanguage();
+
+  const services = [
+    {
+      icon: Truck,
+      titleKey: "roomShifting" as const,
+      descKey: "roomShiftingDesc" as const,
+    },
+    {
+      icon: Package,
+      titleKey: "packingServices" as const,
+      descKey: "packingServicesDesc" as const,
+    },
+    {
+      icon: Home,
+      titleKey: "villaMoving" as const,
+      descKey: "villaMovingDesc" as const,
+    },
+    {
+      icon: Building2,
+      titleKey: "officeMoving" as const,
+      descKey: "officeMovingDesc" as const,
+    },
+    {
+      icon: Shield,
+      titleKey: "safe" as const,
+      descKey: "safeDesc" as const,
+    },
+    {
+      icon: Clock,
+      titleKey: "punctual" as const,
+      descKey: "punctualDesc" as const,
+    },
+  ];
+
   return (
     <section className="py-20 lg:py-28 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 bg-secondary/10 text-secondary text-sm font-semibold rounded-full mb-4">
-            Our Services
+            {t("servicesTitle")}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Everything You Need for a
-            <span className="text-secondary"> Smooth Move</span>
+            {t("servicesSubtitle")}
           </h2>
-          <p className="text-muted-foreground text-lg">
-            From packing to delivery, we handle every aspect of your relocation with care and professionalism.
-          </p>
         </div>
 
         {/* Services Grid */}
@@ -66,10 +65,10 @@ const ServicesSection = () => {
 
               {/* Content */}
               <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-secondary transition-colors">
-                {service.title}
+                {t(service.titleKey)}
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                {service.description}
+                {t(service.descKey)}
               </p>
 
               {/* Decorative corner */}

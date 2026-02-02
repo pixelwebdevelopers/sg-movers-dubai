@@ -1,29 +1,32 @@
 import { CheckCircle2, Award, HeartHandshake, Banknote } from "lucide-react";
-
-const features = [
-  {
-    icon: CheckCircle2,
-    title: "Fast & Efficient",
-    description: "Quick turnaround times without compromising on quality of service.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "Professional Team",
-    description: "Trained movers who handle your belongings with care and respect.",
-  },
-  {
-    icon: Banknote,
-    title: "Affordable Rates",
-    description: "Competitive pricing with no hidden costs. Get value for your money.",
-  },
-  {
-    icon: Award,
-    title: "100% Satisfaction",
-    description: "We're not happy until you are. Your satisfaction is our priority.",
-  },
-];
+import { useLanguage } from "./LanguageContext";
 
 const WhyChooseUs = () => {
+  const { t } = useLanguage();
+
+  const features = [
+    {
+      icon: CheckCircle2,
+      titleKey: "fastEfficient" as const,
+      descKey: "fastEfficientDesc" as const,
+    },
+    {
+      icon: HeartHandshake,
+      titleKey: "professionalTeam" as const,
+      descKey: "professionalTeamDesc" as const,
+    },
+    {
+      icon: Banknote,
+      titleKey: "affordable" as const,
+      descKey: "affordableDesc" as const,
+    },
+    {
+      icon: Award,
+      titleKey: "satisfaction100" as const,
+      descKey: "satisfaction100Desc" as const,
+    },
+  ];
+
   return (
     <section className="py-20 lg:py-28 bg-gradient-hero relative overflow-hidden">
       {/* Background decorations */}
@@ -37,30 +40,28 @@ const WhyChooseUs = () => {
           {/* Left Content */}
           <div>
             <span className="inline-block px-4 py-1.5 bg-secondary/20 text-secondary text-sm font-semibold rounded-full mb-6">
-              Why Choose Us
+              {t("whyChooseTitle")}
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
-              Moving Made
-              <span className="block text-secondary">Simple & Stress-Free</span>
+              {t("whyChooseSubtitle")}
             </h2>
             <p className="text-primary-foreground/70 text-lg mb-8 leading-relaxed">
-              With years of experience serving customers across UAE, we understand what 
-              it takes to make your move smooth and hassle-free. Trust the experts who care.
+              {t("whyChooseDesc")}
             </p>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4">
               <div className="glass rounded-xl p-4 text-center">
                 <div className="text-3xl font-bold text-secondary">5+</div>
-                <div className="text-sm text-primary-foreground/60">Years Experience</div>
+                <div className="text-sm text-primary-foreground/60">{t("yearsExperience")}</div>
               </div>
               <div className="glass rounded-xl p-4 text-center">
                 <div className="text-3xl font-bold text-secondary">500+</div>
-                <div className="text-sm text-primary-foreground/60">Happy Clients</div>
+                <div className="text-sm text-primary-foreground/60">{t("happyClients")}</div>
               </div>
               <div className="glass rounded-xl p-4 text-center">
                 <div className="text-3xl font-bold text-secondary">7</div>
-                <div className="text-sm text-primary-foreground/60">Emirates Covered</div>
+                <div className="text-sm text-primary-foreground/60">{t("emiratesCovered")}</div>
               </div>
             </div>
           </div>
@@ -76,10 +77,10 @@ const WhyChooseUs = () => {
                   <feature.icon className="w-6 h-6 text-secondary" />
                 </div>
                 <h3 className="text-lg font-bold text-primary-foreground mb-2">
-                  {feature.title}
+                  {t(feature.titleKey)}
                 </h3>
                 <p className="text-primary-foreground/60 text-sm leading-relaxed">
-                  {feature.description}
+                  {t(feature.descKey)}
                 </p>
               </div>
             ))}

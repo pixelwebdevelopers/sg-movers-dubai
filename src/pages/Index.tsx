@@ -5,6 +5,7 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
       <ContactSection />
       <Footer />
       <WhatsAppFloat />
+      <LanguageSwitcher />
     </div>
   );
 };

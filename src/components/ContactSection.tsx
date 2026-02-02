@@ -1,4 +1,5 @@
 import { Phone, Mail, Instagram, MapPin } from "lucide-react";
+import { useLanguage } from "./LanguageContext";
 
 const phoneNumbers = [
   { number: "+971 52 462 1082", primary: true },
@@ -8,21 +9,19 @@ const phoneNumbers = [
 ];
 
 const ContactSection = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="contact" className="py-20 lg:py-28 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 bg-secondary/10 text-secondary text-sm font-semibold rounded-full mb-4">
-            Contact Us
+            {t("contactTitle")}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Get In Touch
-            <span className="text-secondary"> Today</span>
+            {t("contactSubtitle")}
           </h2>
-          <p className="text-muted-foreground text-lg">
-            Ready to move? Contact us through any of these channels
-          </p>
         </div>
 
         {/* Contact Cards */}
@@ -35,7 +34,7 @@ const ContactSection = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground">WhatsApp / Call</h3>
-                <p className="text-muted-foreground text-sm">Available 24/7</p>
+                <p className="text-muted-foreground text-sm">{t("workingHoursValue")}</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
@@ -74,7 +73,7 @@ const ContactSection = () => {
                 <Mail className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <h3 className="font-bold text-foreground">Email Us</h3>
+                <h3 className="font-bold text-foreground">{t("emailLabel")}</h3>
                 <p className="text-muted-foreground text-sm">info@sgmovers.ae</p>
               </div>
             </a>
@@ -90,7 +89,7 @@ const ContactSection = () => {
                 <Instagram className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-white">Follow Us</h3>
+                <h3 className="font-bold text-white">{t("followUs")}</h3>
                 <p className="text-white/80 text-sm">@sgmoversuae</p>
               </div>
             </a>
@@ -101,8 +100,8 @@ const ContactSection = () => {
                 <MapPin className="w-6 h-6 text-secondary" />
               </div>
               <div>
-                <h3 className="font-bold text-foreground">Service Area</h3>
-                <p className="text-muted-foreground text-sm">All across UAE</p>
+                <h3 className="font-bold text-foreground">{t("address")}</h3>
+                <p className="text-muted-foreground text-sm">{t("addressValue")}</p>
               </div>
             </div>
           </div>
