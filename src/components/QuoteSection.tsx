@@ -49,7 +49,9 @@ const QuoteSection = () => {
 
   const calculatePrice = useCallback(() => {
     const basePrice = parseInt(formData.bhk) || 0;
-    const itemsPrice = selectedItems.length * 50;
+    // Exclude wardrobe from items count - wardrobe price comes from door selection only
+    const regularItems = selectedItems.filter(id => id !== "wardrobe");
+    const itemsPrice = regularItems.length * 50;
     const wardrobePrice = wardrobeDoors > 0 ? (wardrobeOptions.find(w => w.doors === wardrobeDoors)?.price || 0) : 0;
     const route = (formData.from + formData.to).toLowerCase();
     const abuDhabiSurcharge = route.includes("abu dhabi") ? 400 : 0;
