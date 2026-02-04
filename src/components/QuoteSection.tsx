@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Send, Home, Sofa, Refrigerator, Bed, WashingMachine, MapPin, MessageSquare, User, Phone } from "lucide-react";
+import { Send, Home, Sofa, Refrigerator, Bed, WashingMachine, DoorClosed, MapPin, MessageSquare, User, Phone } from "lucide-react";
 import { z } from "zod";
 
 const homeTypes = [
@@ -15,6 +15,14 @@ const items = [
   { id: "bed", label: "Bed", icon: Bed, price: 50 },
   { id: "fridge", label: "Fridge", icon: Refrigerator, price: 50 },
   { id: "washing", label: "Washing Machine", icon: WashingMachine, price: 50 },
+  { id: "wardrobe", label: "Wardrobe", icon: DoorClosed, price: 0 },
+];
+
+const wardrobeOptions = [
+  { doors: 1, label: "1 Door", price: 50 },
+  { doors: 2, label: "2 Door", price: 70 },
+  { doors: 3, label: "3 Door", price: 90 },
+  { doors: 4, label: "4 Door", price: 110 },
 ];
 
 // Validation schema
@@ -36,20 +44,27 @@ const QuoteSection = () => {
     notes: "",
   });
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [wardrobeDoors, setWardrobeDoors] = useState<number>(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const calculatePrice = useCallback(() => {
     const basePrice = parseInt(formData.bhk) || 0;
     const itemsPrice = selectedItems.length * 50;
+    const wardrobePrice = wardrobeDoors > 0 ? (wardrobeOptions.find(w => w.doors === wardrobeDoors)?.price || 0) : 0;
     const route = (formData.from + formData.to).toLowerCase();
     const abuDhabiSurcharge = route.includes("abu dhabi") ? 400 : 0;
-    return basePrice + itemsPrice + abuDhabiSurcharge;
-  }, [formData.bhk, formData.from, formData.to, selectedItems]);
+    return basePrice + itemsPrice + wardrobePrice + abuDhabiSurcharge;
+  }, [formData.bhk, formData.from, formData.to, selectedItems, wardrobeDoors]);
 
   const handleItemToggle = (itemId: string) => {
-    setSelectedItems((prev) =>
-      prev.includes(itemId) ? prev.filter((id) => id !== itemId) : [...prev, itemId]
-    );
+    setSelectedItems((prev) => {
+      const isRemoving = prev.includes(itemId);
+      // Reset wardrobe doors if wardrobe is being deselected
+      if (itemId === "wardrobe" && isRemoving) {
+        setWardrobeDoors(0);
+      }
+      return isRemoving ? prev.filter((id) => id !== itemId) : [...prev, itemId];
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -75,10 +90,17 @@ const QuoteSection = () => {
     }
 
     const bhkLabel = homeTypes.find((h) => h.value === formData.bhk)?.label || "";
-    const selectedItemLabels = items
+    let selectedItemLabels = items
       .filter((item) => selectedItems.includes(item.id))
       .map((item) => item.label)
-      .join(", ") || "None";
+      .join(", ");
+    
+    if (wardrobeDoors > 0) {
+      const wardrobeLabel = `Wardrobe (${wardrobeDoors} Door)`;
+      selectedItemLabels = selectedItemLabels ? `${selectedItemLabels}, ${wardrobeLabel}` : wardrobeLabel;
+    }
+    
+    if (!selectedItemLabels) selectedItemLabels = "None";
 
     const message = `🏠 *SG Movers Quote Request*
 
@@ -123,10 +145,18 @@ const QuoteSection = () => {
             <div className="bg-gradient-hero rounded-2xl p-6 mb-8 text-center">
               <p className="text-primary-foreground/70 text-sm mb-1">Estimated Price</p>
               <div className="flex items-baseline justify-center gap-2">
-                <span className="text-5xl md:text-6xl font-bold text-primary-foreground">
-                  {price}
-                </span>
-                <span className="text-2xl text-secondary font-semibold">AED</span>
+                {price > 0 ? (
+                  <>
+                    <span className="text-5xl md:text-6xl font-bold text-primary-foreground">
+                      {price}
+                    </span>
+                    <span className="text-2xl text-secondary font-semibold">AED</span>
+                  </>
+                ) : (
+                  <span className="text-2xl md:text-3xl font-bold text-primary-foreground/80">
+                    Select home size to see estimate
+                  </span>
+                )}
               </div>
               <p className="text-primary-foreground/50 text-xs mt-2">
                 *Final price may vary based on actual requirements
@@ -218,6 +248,36 @@ const QuoteSection = () => {
                 </div>
               </div>
 
+              {/* Wardrobe Door Selection - Only show when wardrobe is selected */}
+              {selectedItems.includes("wardrobe") && (
+                <div className="animate-in slide-in-from-top-2 duration-300">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                    <DoorClosed className="w-4 h-4 text-secondary" />
+                    Select Wardrobe Door Type
+                  </label>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {wardrobeOptions.map((option) => (
+                      <button
+                        key={option.doors}
+                        type="button"
+                        onClick={() => setWardrobeDoors(wardrobeDoors === option.doors ? 0 : option.doors)}
+                        className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-300 ${
+                          wardrobeDoors === option.doors
+                            ? "border-secondary bg-secondary/10"
+                            : "border-border hover:border-secondary/50"
+                        }`}
+                      >
+                        <DoorClosed className={`w-6 h-6 ${wardrobeDoors === option.doors ? 'text-secondary' : 'text-muted-foreground'}`} />
+                        <span className="text-sm font-medium">{option.label}</span>
+                        <span className={`text-xs ${wardrobeDoors === option.doors ? 'text-secondary' : 'text-muted-foreground'}`}>
+                          +{option.price} AED
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Locations */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -274,7 +334,7 @@ const QuoteSection = () => {
                 className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-cta text-cta-foreground font-bold text-lg rounded-xl shadow-cta hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
               >
                 <Send className="w-5 h-5" />
-                Send Quote to WhatsApp
+                Get Exact Quote on WhatsApp
               </button>
             </form>
           </div>

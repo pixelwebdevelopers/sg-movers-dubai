@@ -3,9 +3,6 @@ import { useLanguage } from "./LanguageContext";
 
 const phoneNumbers = [
   { number: "+971 52 462 1082", primary: true },
-  { number: "+971 52 454 1092", primary: false },
-  { number: "+971 52 782 6394", primary: false },
-  { number: "+971 52 103 4995", primary: false },
 ];
 
 const ContactSection = () => {
